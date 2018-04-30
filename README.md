@@ -6,6 +6,20 @@ photon -> particle cloud API -> raspberry pi
 
 ## usage
 
+Activate virtualenv:
+
+```
+source ~/.virtualenv/p2penergy/bin/activate
+```
+
+Navigate to source code:
+
+```
+cd ~/Developer/p2penergy
+```
+
+Run Flask:
+
 ```
 export FLASK_APP=app.py
 flask run
@@ -23,6 +37,14 @@ flask run
 * Fridge Door Closed, Light Off, Cooler Off: 20 W
 * Fridge Cyclic Surge/Startup: 840 W, 6.5 A (after every minute for 20 seconds)
 * Raspberry Pi Zero W: 1 W
+
+## resources:
+
+1. https://www.hackster.io/ShawnHymel/hack-your-home-part-3-power-monitor-16a313
+2. https://docs.particle.io/reference/api/#list-devices
+3. https://www.hackster.io/mjrobot/python-webserver-with-flask-and-raspberry-pi-41b5fc
+
+
 
 ## next steps
 
