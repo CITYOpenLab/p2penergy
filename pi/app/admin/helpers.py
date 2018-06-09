@@ -23,9 +23,7 @@ from flask import current_app
 
 @celery.task
 def get_sse(product_slug):
-    # url = "https://api.particle.io/v1/products/{}/events?access_token={}".format(product_slug, current_app.config["PARTICLE_ACCESS_TOKEN"])
-    print(current_app.config["PARTICLE_ACCESS_TOKEN"])
-    url = "https://api.particle.io/v1/products/{}/events?access_token=bf84ae590b15894b97f61dafcb9ef9b002f56b36".format(product_slug)
+    url = "https://api.particle.io/v1/products/{}/events?access_token={}".format(product_slug, current_app.config["PARTICLE_ACCESS_TOKEN"])
     response = requests.get(url, stream=True)
     client = sseclient.SSEClient(response)
     for event in client.events():
