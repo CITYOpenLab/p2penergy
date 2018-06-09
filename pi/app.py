@@ -19,13 +19,9 @@ from flask import Flask, g, request, jsonify, render_template
 app = Flask(__name__)                   # Flask
 # app.config.from_object(Config)          # config
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
-
-@app.route("/test")
-def test():
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True)
