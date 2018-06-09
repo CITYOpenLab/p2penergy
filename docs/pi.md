@@ -21,18 +21,18 @@ Flask is a microframework that makes it easy to build web apps in Python. It has
 2. Set up a [virtual environment](https://wsvincent.com/install-python3-mac/) (optional but recommended)
 3. Install dependencies
 
-```bash
-cd p2penergy/pi
-pip3 install -r requirements.txt
-```
+    ```bash
+    cd p2penergy/pi
+    pip3 install -r requirements.txt
+    ```
 
-4. Run the Flask built-in server for testing 
+4. Run the built-in server for testing 
 
-```bash
-export FLASK_ENV=development
-export FLASK_APP=app.y
-flask run
-```
+    ```bash
+    export FLASK_ENV=development
+    export FLASK_APP=app.y
+    flask run
+    ```
 
 ### Deploy
 

@@ -14,7 +14,7 @@ Makes power measurements and transmits the data to a central server.
 
 ## Code
 
-The source code can be found in the [../photon](../photon) directory.
+The source code can be found in the [../photon](https://github.com/CITYOpenLab/p2penergy/tree/master/photon) directory.
 
 The following resources were used to write the power monitor:
 
