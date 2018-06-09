@@ -18,8 +18,8 @@ The source code can be found in the [../photon](https://github.com/CITYOpenLab/p
 
 The following resources were used to write the power monitor:
 
-1. https://www.hackster.io/ShawnHymel/hack-your-home-part-3-power-monitor-16a313
-2. https://www.hackster.io/mjrobot/python-webserver-with-flask-and-raspberry-pi-41b5fc
+1. [https://www.hackster.io/ShawnHymel/hack-your-home-part-3-power-monitor-16a313](https://www.hackster.io/ShawnHymel/hack-your-home-part-3-power-monitor-16a313)
+2. [https://www.hackster.io/mjrobot/python-webserver-with-flask-and-raspberry-pi-41b5fc](https://www.hackster.io/mjrobot/python-webserver-with-flask-and-raspberry-pi-41b5fc)
 
 ## Development/testing
 
