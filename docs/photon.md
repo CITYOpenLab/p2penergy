@@ -25,6 +25,8 @@ The following resources were used to write the power monitor:
 
 Visit [https://build.particle.io/build](https://build.particle.io/build) to write code in the online editor and flash to a device over the Internet.
 
+At the above URL, you can create a new app, and copy paste in the code. After you are done writing, click the check mark to verify, and then click the lightning bolt to flash the code onto a device. You can see which device gets flashed by clicking the target icon for available devices. You can add a new device by device ID. If added to a Particle product, you should be able to see the relevant devices without needing their ID.
+
 ## Deploying to a product
 
 View [https://docs.particle.io/guide/tools-and-features/console/#product-tools](https://docs.particle.io/guide/tools-and-features/console/#product-tools) for information on how to deploy a firmware to a fleet of devices.

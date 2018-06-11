@@ -12,4 +12,6 @@ celery
 redis
 marshmallow_sqlalchemy
 flask-mqtt
-flask-rq2
+flask-admin
+flask-socketio
+eventlet
