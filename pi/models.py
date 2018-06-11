@@ -1,17 +1,15 @@
+###########
+# imports #
+###########
+
 from app import db
 from datetime import datetime
+from marshmallow_sqlalchemy import ModelSchema
+from marshmallow import Schema, fields
 
-class User(db.Model):
-    ## basic
-    id = db.Column(db.Integer(), primary_key=True)
-    username = db.Column(db.String(80), index=True,
-                         unique=True, nullable=False)
-    password = db.Column(db.String(), nullable=False)
-    timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
-    admin = db.Column(db.Boolean(), default=False, nullable=False)
-
-    def __repr__(self):
-        return '<User {} {}>'.format(self.username, self.id)
+##########
+# models #
+##########
 
 class Event(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -27,3 +25,7 @@ class Event(db.Model):
 
     def __repr__(self):
         return '<Event {} {}>'.format(self.name, self.id)
+
+class EventSchema(ModelSchema):
+    class Meta:
+        model = Event

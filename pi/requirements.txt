@@ -12,4 +12,4 @@ celery
 redis
 marshmallow_sqlalchemy
 flask-mqtt
-
+flask-rq2

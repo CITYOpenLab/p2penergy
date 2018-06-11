@@ -3,7 +3,7 @@ function getEvents() {
     let settings = {
         "async": true,
         "crossDomain": true,
-        "url": "/admin/get-events",
+        "url": "/api/events",
         "method": "GET",
     }
 
