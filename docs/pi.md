@@ -8,9 +8,10 @@ Acts as the central server. Receives information from a fleet of Photons. Expose
     - [Web app](#web-app)
         - [Setup](#setup)
             - [Flask](#flask)
-            - [Background jobs](#background-jobs)
             - [Database](#database)
-            - [Routes](#routes)
+            - [Background jobs](#background-jobs)
+        - [Routes](#routes)
+        - [MQTT client](#mqtt-client)
         - [Deploy](#deploy)
 
 <!-- /TOC -->
@@ -38,7 +39,6 @@ Flask is a microframework that makes it easy to build web apps in Python. It has
     ```bash
     export FLASK_ENV=development
     export FLASK_APP=app
-    export PARTICLE_ACCESS_TOKEN=0123456789abcdef
     flask run
     ```
 
@@ -46,40 +46,19 @@ Flask is a microframework that makes it easy to build web apps in Python. It has
 
     FLASK_APP refers to the Flask app that will be run.
 
-    PARTICLE_ACCESS_TOKEN is a token to connect to the [Particle Cloud API](cloud.md).
-    
-#### Background jobs
-
-Using Celery or RQ, in conjunction with a broker like Redis, Flask is able to execute background tasks. These packages are more scalable than using cron jobs or threads. 
-
-If you would like to make use of functions that run in the background using Celery, you must:
-
-1. Install Redis broker for background jobs. On macOS, you can use Homebrew.
-
-    ```bash
-    brew install redis 
-    ```
-
-    For other platforms, see: [https://redis.io/topics/quickstart](https://redis.io/topics/quickstart)
-
-2. Run Redis broker in a new Terminal
-
-    ```bash
-    redis-server
-    ```
-
-3. Run a Celery worker a new Terminal
-
-    ```bash
-    export PARTICLE_ACCESS_TOKEN=0123456789abcdef
-    celery worker -A celery_worker.celery --loglevel=info
-    ```
-
 #### Database
 
 Sqlite3 is an embeddable database that does not require a server. 
 
-For model changes, use the following set of commands:
+Carru out first-time database creation as follows:
+
+```bash
+flask db init
+flask db migrate
+flask db upgrade
+```
+
+For subsequent model changes, just do:
 
 ```bash
 flask db migrate
@@ -94,18 +73,79 @@ flask db migrate
 flask db upgrade
 ```
 
-#### Routes
+#### Background jobs
 
-Currently, only two routes are functional.
+Using Celery, in conjunction with a broker like Redis, Flask is able to execute background tasks.
+
+If you would like to make use of functions that run in the background using Celery, you must:
+
+1. Install Redis. On macOS, you can use Homebrew
+
+    ```bash
+    brew install redis 
+    ```
+
+    For other platforms, see: [https://redis.io/topics/quickstart](https://redis.io/topics/quickstart)
+
+2. Run the Redis broker in a new Terminal
+
+    ```bash
+    redis-server
+    ```
+
+3. Run a Celery worker a new Terminal
+
+    ```bash
+    celery worker -A celery_worker.celery --loglevel=info
+    ```
+
+4. Start the Flask app
+
+    ```bash
+    cd p2penergy/pi
+    export PARTICLE_ACCESS_TOKEN=0123456abcdef
+    flask run
+    ```
+
+    Here, `PARTICLE_ACCESS_TOKEN` is used to access the Server-Sent Events stream from the [Particle Cloud API](cloud.md).
+
+
+### Routes
+
+Currently, only a few routes are functional.
+
+1. /
+
+    A home page.
 
 1. /admin
 
-    This route is the homepage for the admin panel. Currently, if you navigate to it, a repeated AJAX call will update the page with the five most recent events stored on the database.
+    This route is the homepage for the dashboard. Currently, if you navigate to it, a repeated AJAX call will update the page with the five most recent events stored on the database.
 
-2. /admin/collect
+2. /test/event-stream
 
-    If Redis and a celery worker are running, navigating to this page will start collecting data from the Server-Sent Events stream mentioned in the [Particle Cloud API](cloud.md) documentation.
+    If Redis and a Celery worker are running, navigating to this page will start collecting data from the Particle Cloud API Server-Sent Events stream.
 
+### MQTT client
+
+The web app can accept messages over MQTT. To setup for use with a broker, export the following variables before running:
+
+```bash
+export MQTT_BROKER_URL= # defaults to broker.hivemq.com, a free online broker for testing
+export MQTT_BROKER_PORT= # defaults to 1883
+export MQTT_TLS_ENABLED= # defaults to False
+export MQTT_KEEPALIVE= # defaults to 5
+export MQTT_USERNAME=  # defaults to ''
+export MQTT_PASSWORD= # defaults to ''
+```
+
+The subscribed topics may be set in `app.py`. Currently, the app subscribes to:
+
+```
+p2penergy/photon
+```
+
+Future code updates will incorporate Flask-SocketsIO for bi-directional communication.
 
 ### Deploy
 

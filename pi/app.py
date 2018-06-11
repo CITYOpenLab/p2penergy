@@ -36,7 +36,11 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return "index"
+
+@app.route("/admin")
+def admin():
+    return render_template("admin.html")
 
 @app.route("/api/events", methods=["GET"])
 def get_events():
@@ -56,7 +60,7 @@ def get_events():
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
-    mqtt.subscribe('testtopic/hello')
+    mqtt.subscribe('p2penergy/photon')
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
@@ -73,7 +77,7 @@ def handle_mqtt_message(client, userdata, message):
 @app.route("/test/event-stream")
 def event_collection():
     save_particle_event_stream.delay(
-        "p2p-energy-v100", "bf84ae590b15894b97f61dafcb9ef9b002f56b36")
+        "p2p-energy-v100", app.config["PARTICLE_ACCESS_TOKEN"])
     return("Started collection.")
 
 @celery.task()
