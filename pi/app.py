@@ -6,10 +6,12 @@ import json
 import requests
 import sseclient
 from flask import Flask
-from sqlalchemy import or_, and_, desc, asc, text
 from flask import jsonify, render_template, request, redirect, url_for, current_app
 from flask_migrate import Migrate
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_mqtt import Mqtt
+from sqlalchemy import or_, and_, desc, asc, text
 from config import Config
 from helpers import make_celery, save_event_from_dict
 
@@ -21,6 +23,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 mqtt = Mqtt(app)
 celery = make_celery(app)
+admin = Admin(app, name='p2penergy', template_mode='bootstrap3')
 
 ##################
 # delayed import #
@@ -30,17 +33,19 @@ from models import db, Event, EventSchema
 db.init_app(app)
 migrate = Migrate(app, db)
 
+###############
+# admin panel #
+###############
+
+admin.add_view(ModelView(Event, db.session))
+
 #########
 # views #
 #########
 
 @app.route("/")
 def index():
-    return "index"
-
-@app.route("/admin")
-def admin():
-    return render_template("admin.html")
+    return render_template("index.html")
 
 @app.route("/api/events", methods=["GET"])
 def get_events():

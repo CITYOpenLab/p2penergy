@@ -114,15 +114,15 @@ If you would like to make use of functions that run in the background using Cele
 
 Currently, only a few routes are functional.
 
-1. /
+1. `/`
 
-    A home page.
+    A home page. Currently, if you navigate to it, a repeated AJAX call will update the page with the five most recent events stored on the database.
 
-1. /admin
+2. `/admin`
 
-    This route is the homepage for the dashboard. Currently, if you navigate to it, a repeated AJAX call will update the page with the five most recent events stored on the database.
+    Using the Flask-Admin extension, this page helps you inspect and create records in the database.
 
-2. /test/event-stream
+3. `/test/event-stream`
 
     If Redis and a Celery worker are running, navigating to this page will start collecting data from the Particle Cloud API Server-Sent Events stream.
 
