@@ -11,3 +11,5 @@ pylint
 celery
 redis
 marshmallow_sqlalchemy
+flask-mqtt
+

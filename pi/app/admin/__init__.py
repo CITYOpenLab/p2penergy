@@ -1,10 +1,12 @@
-# extension to help create blueprints
+###########
+# imports #
+###########
+
 from flask import Blueprint
 
-# create a blueprint for the many routes
+# create blueprint
 bp = Blueprint("admin", __name__, url_prefix="/admin", static_folder="static",
                static_url_path="/admin/static", template_folder="templates")
 
-# import modules containing routes into __init__.py
-# the . tells __init__.py to look in the current directory for these modules
+# import routes
 from . import routes
