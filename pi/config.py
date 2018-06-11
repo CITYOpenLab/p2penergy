@@ -10,6 +10,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 ##################
 
 class Config():
+    # celery
+    CELERY_RESULT_BACKEND = "redis://localhost:6379"
+    CELERY_BROKER_URL = "redis://localhost:6379"
     # particle
     PARTICLE_ACCESS_TOKEN = os.environ.get("PARTICLE_ACCESS_TOKEN")
     # sqlalchemy database

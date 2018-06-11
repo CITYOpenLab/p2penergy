@@ -2,10 +2,11 @@
 # imports #
 ###########
 
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from marshmallow_sqlalchemy import ModelSchema
 from marshmallow import Schema, fields
+db = SQLAlchemy()
 
 ##########
 # models #

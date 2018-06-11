@@ -2,15 +2,16 @@
 # imports #
 ###########
 
+import json
+import requests
+import sseclient
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_, and_, desc, asc, text
-from flask import (jsonify, render_template, request,
-                   redirect, url_for, current_app)
+from flask import jsonify, render_template, request, redirect, url_for, current_app
 from flask_migrate import Migrate
 from flask_mqtt import Mqtt
-from flask_rq2 import RQ
 from config import Config
+from helpers import make_celery, save_event_from_dict
 
 ##############
 # initialize #
@@ -18,17 +19,16 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 mqtt = Mqtt(app)
-rq = RQ(app)
+celery = make_celery(app)
 
 ##################
 # delayed import #
 ##################
 
-from models import Event, EventSchema
-from helpers import save_event_from_dict
+from models import db, Event, EventSchema
+db.init_app(app)
+migrate = Migrate(app, db)
 
 #########
 # views #
@@ -50,7 +50,6 @@ def get_events():
     else:
         return jsonify([])
 
-
 ########
 # mqtt #
 ########
@@ -66,5 +65,25 @@ def handle_mqtt_message(client, userdata, message):
         payload=message.payload.decode()
     )
     print(data)
-    save_event_from_dict(data)
-    
+
+################
+# event stream #
+################
+
+@app.route("/test/event-stream")
+def event_collection():
+    save_particle_event_stream.delay(
+        "p2p-energy-v100", "bf84ae590b15894b97f61dafcb9ef9b002f56b36")
+    return("Started collection.")
+
+@celery.task()
+def save_particle_event_stream(product_slug, access_token):
+    url = "https://api.particle.io/v1/products/{}/events?access_token={}".format(
+        product_slug, access_token)
+    print(url)
+    response = requests.get(url, stream=True)
+    client = sseclient.SSEClient(response)
+    for event in client.events():
+        # event_name = event.event
+        data = json.loads(event.data)
+        save_event_from_dict(data)

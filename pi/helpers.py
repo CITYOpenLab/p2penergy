@@ -7,18 +7,13 @@ import json
 import arrow
 import requests
 import sseclient
-from app import app
-from app import db
-from app import rq
-from models import Event
+from celery import Celery
+from models import db, Event
+from flask import current_app as app
 
 #############
 # functions #
 #############
-
-def save_event_from_json(json):
-    data = json.loads(json)
-    save_event_from_dict(data)
 
 def save_event_from_dict(dict):
     event = Event()
@@ -30,16 +25,18 @@ def save_event_from_dict(dict):
     db.session.add(event)
     db.session.commit()
 
-####################
-# background tasks #
-####################
+def make_celery(app):
+    celery = Celery(
+        app.import_name,
+        backend=app.config['CELERY_RESULT_BACKEND'],
+        broker=app.config['CELERY_BROKER_URL']
+    )
+    celery.conf.update(app.config)
 
-@rq.job
-def get_particle_event_stream(product_slug):
-    url = "https://api.particle.io/v1/products/{}/events?access_token={}".format(
-        product_slug, app.config["PARTICLE_ACCESS_TOKEN"])
-    response = requests.get(url, stream=True)
-    client = sseclient.SSEClient(response)
-    for event in client.events():
-        # event_name = event.event
-        save_event_from_json(event.data)
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
