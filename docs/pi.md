@@ -139,13 +139,16 @@ export MQTT_USERNAME=  # defaults to ''
 export MQTT_PASSWORD= # defaults to ''
 ```
 
-The subscribed topics may be set in `app.py`. Currently, the app subscribes to:
+The subscribed topics may be set in `app.py`. Currently, the app subscribes to the following channels on startup:
 
 ```
-p2penergy/photon
+p2penergy/test
+p2penergy/photon/events
 ```
 
-Future code updates will incorporate Flask-SocketsIO for bi-directional communication.
+It is possible to communicate with the client over websockets via the `publish` and `subscribe` events. If a JSON string of the form `{"topic" : "p2penergy/topic"}` is sent to the `subscribe` event, then the web app will subscribe to the given topic over MQTT. If a JSON string of the form `{"topic" : "p2penergy/topic", "message" : "hello world"}` is sent to the `publish` event, then the web app will publish the given message to the given topic over MQTT.
+
+Such functionality is useful for frontend development, as we can use SocketIO with Javascript to update HTML pages in real-time with data.
 
 ### Deploy
 
