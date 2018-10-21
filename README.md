@@ -2,7 +2,7 @@
 
 ## Documentation
 
-Full documentation can be viewed on the Github Pages at [https://cityopenlab.github.io/p2penergy/](https://cityopenlab.github.io/p2penergy/) or in the in the [/docs](/docs) folder.
+Full documentation can be viewed in the [/docs](/docs) folder.
 
 ## How to contribute
 
